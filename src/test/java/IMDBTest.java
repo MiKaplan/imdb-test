@@ -35,7 +35,7 @@ public class IMDBTest {
         assertTrue(menuPage.isLoaded(), "Menu is not loaded");
         final TopMoviesPage topMoviesPage = menuPage.clickOnTopMoviesButton();
         assertTrue(topMoviesPage.isLoaded(), "Top 250 movies is not loaded");
-        final List<Movie> topMovieList = topMoviesPage.getTopMovies(5);
+        final List<Movie> topMovieList = topMoviesPage.getMoviesFromList(5);
         final Movie godFather = topMovieList.stream()
                 .filter(movie -> movie.getTitle().equals("Крестный отец"))
                 .findFirst().orElseThrow();
@@ -55,7 +55,7 @@ public class IMDBTest {
         assertTrue(menuPage.isLoaded(), "Menu is not loaded");
         final TopMoviesPage topMoviesPage = menuPage.clickOnTopMoviesButton();
         assertTrue(topMoviesPage.isLoaded(), "Top 250 movies is not loaded");
-        final Movie randomMovie = topMoviesPage.getMoviesFromList()
+        final Movie randomMovie = topMoviesPage.getMoviesFromList(250)
                 .get(new Random().nextInt(250));
         final MoviePage moviePage = topMoviesPage.clickOnMovieByPosition(randomMovie.getPosition());
         softAssert.assertTrue(moviePage.isLoaded(), "Name is not loaded");

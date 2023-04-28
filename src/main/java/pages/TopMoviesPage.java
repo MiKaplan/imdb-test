@@ -8,7 +8,6 @@ import org.openqa.selenium.support.FindBy;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public final class TopMoviesPage extends BasePage {
 
@@ -32,20 +31,15 @@ public final class TopMoviesPage extends BasePage {
         return new MoviePage(browser);
     }
 
-    public List<Movie> getTopMovies(final int index) {
-        return getMoviesFromList().stream()
-                .filter(movie -> movie.getPosition() <= index)
-                .collect(Collectors.toList());
-    }
-
-    public List<Movie> getMoviesFromList() {
+    public List<Movie> getMoviesFromList(final int numberOfMovies) {
         final List<Movie> movieModels = new ArrayList<>();
-        moviesList.forEach(movie -> movieModels.add(new Movie(
-                getPosition(movie),
-                getTitle(movie),
-                getYear(movie),
-                getRating(movie))
-        ));
+        moviesList.stream().limit(Math.min(moviesList.size(), numberOfMovies)).
+                forEach(movie -> movieModels.add(new Movie(
+                        getPosition(movie),
+                        getTitle(movie),
+                        getYear(movie),
+                        getRating(movie))
+                ));
         return movieModels;
     }
 
