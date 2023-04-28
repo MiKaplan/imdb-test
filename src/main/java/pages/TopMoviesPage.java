@@ -1,8 +1,8 @@
 package pages;
 
+import driver.Browser;
 import models.Movie;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
@@ -18,8 +18,8 @@ public final class TopMoviesPage extends BasePage {
     @FindBy(css = "tbody tr")
     private List<WebElement> moviesList;
 
-    protected TopMoviesPage(final WebDriver driver) {
-        super(driver);
+    protected TopMoviesPage(final Browser browser) {
+        super(browser);
     }
 
     @Override
@@ -29,7 +29,7 @@ public final class TopMoviesPage extends BasePage {
 
     public MoviePage clickOnMovieByPosition(final int position) {
         getTitleElement(moviesList.get(position - 1)).click();
-        return new MoviePage(driver);
+        return new MoviePage(browser);
     }
 
     public List<Movie> getTopMovies(final int index) {

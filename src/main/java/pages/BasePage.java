@@ -1,18 +1,18 @@
 package pages;
 
-import org.openqa.selenium.WebDriver;
+import driver.Browser;
 import org.openqa.selenium.support.PageFactory;
 import utils.WaitUtil;
 
 public abstract class BasePage {
 
-    protected final WebDriver driver;
+    protected final Browser browser;
     protected final WaitUtil waitUtil;
 
-    protected BasePage(final WebDriver driver) {
-        this.driver = driver;
-        PageFactory.initElements(this.driver, this);
-        waitUtil = new WaitUtil(this.driver);
+    protected BasePage(final Browser browser) {
+        this.browser = browser;
+        PageFactory.initElements(browser.getDriver(), this);
+        waitUtil = new WaitUtil(browser.getDriver());
     }
 
     public abstract boolean isLoaded();

@@ -1,6 +1,6 @@
 package pages;
 
-import org.openqa.selenium.WebDriver;
+import driver.Browser;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
@@ -20,8 +20,8 @@ public final class MoviePage extends BasePage {
     @FindBy(css = "ul li a[class='ipc-link ipc-link--baseAlt ipc-link--inherit-color']")
     private List<WebElement> years;
 
-    protected MoviePage(final WebDriver driver) {
-        super(driver);
+    protected MoviePage(final Browser browser) {
+        super(browser);
     }
 
     @Override

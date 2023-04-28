@@ -1,6 +1,6 @@
 package pages;
 
-import org.openqa.selenium.WebDriver;
+import driver.Browser;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
@@ -12,8 +12,8 @@ public final class MenuPage extends BasePage {
     @FindBy(linkText = "Top 250 Movies")
     private WebElement topMoviesButton;
 
-    protected MenuPage(final WebDriver driver) {
-        super(driver);
+    protected MenuPage(final Browser browser) {
+        super(browser);
     }
 
     @Override
@@ -23,6 +23,6 @@ public final class MenuPage extends BasePage {
 
     public TopMoviesPage clickOnTopMoviesButton() {
         waitUtil.waitUntilElementIsClickable(topMoviesButton).click();
-        return new TopMoviesPage(driver);
+        return new TopMoviesPage(browser);
     }
 }

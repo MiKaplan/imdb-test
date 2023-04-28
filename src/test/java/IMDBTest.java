@@ -1,13 +1,10 @@
 import config.PropertyConfig;
-import io.github.bonigarcia.wdm.WebDriverManager;
+import driver.Browser;
 import models.Movie;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+import org.testng.asserts.SoftAssert;
 import pages.IMDBMainPage;
 import pages.MenuPage;
 import pages.MoviePage;
@@ -16,26 +13,22 @@ import pages.TopMoviesPage;
 import java.util.List;
 import java.util.Random;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.testng.Assert.assertTrue;
 
 public class IMDBTest {
 
-    private WebDriver driver;
+    private Browser browser;
+    private SoftAssert softAssert;
     private IMDBMainPage mainPage;
 
-    @BeforeEach
+    @BeforeMethod
     void preCondition() {
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments("--remote-allow-origins=*");
-        options.addArguments("--window-size=1920,1080");
-        WebDriverManager.chromedriver().setup();
-        driver = new ChromeDriver(options);
-        driver.get(new PropertyConfig().getBaseUrl());
-        mainPage = new IMDBMainPage(driver);
+        softAssert = new SoftAssert();
+        browser = new Browser(new PropertyConfig());
+        mainPage = new IMDBMainPage(browser);
     }
 
-    @Test
-    @DisplayName("Check top 5 movies and contains 'Godfather'")
+    @Test(description = "Check top 5 movies and contains 'Godfather'")
     void checkTop5ContainsGodFatherMovie() {
         assertTrue(mainPage.isLoaded(), "IMDB page is not loaded");
         final MenuPage menuPage = mainPage.clickOnMenuButton();
@@ -47,16 +40,15 @@ public class IMDBTest {
                 .filter(movie -> movie.getTitle().equals("Крестный отец"))
                 .findFirst().orElseThrow();
         final MoviePage moviePage = topMoviesPage.clickOnMovieByPosition(godFather.getPosition());
-        assertAll("Check godfather film contains correct data",
-                () -> assertTrue(moviePage.isLoaded(), "Name is not loaded"),
-                () -> assertEquals(godFather.getTitle(), moviePage.getName(), "Wrong Title"),
-                () -> assertTrue(moviePage.getYear(godFather.getYear()), "Wrong Year"),
-                () -> assertEquals(godFather.getPosition(), moviePage.getPosition(), "Wrong Position"),
-                () -> assertEquals(godFather.getRating(), moviePage.getRating(), "Wrong Rating"));
+        softAssert.assertTrue(moviePage.isLoaded(), "Name is not loaded");
+        softAssert.assertEquals(godFather.getTitle(), moviePage.getName(), "Wrong Title");
+        softAssert.assertTrue(moviePage.getYear(godFather.getYear()), "Wrong Year");
+        softAssert.assertEquals(godFather.getPosition(), moviePage.getPosition(), "Wrong Position");
+        softAssert.assertEquals(godFather.getRating(), moviePage.getRating(), "Wrong Rating");
+        softAssert.assertAll();
     }
 
-    @Test
-    @DisplayName("Check top 250 movies and check data random movie")
+    @Test(description = "Check top 250 movies and check data random movie")
     void checkRandomMovieFromTop() {
         assertTrue(mainPage.isLoaded(), "IMDB page is not loaded");
         final MenuPage menuPage = mainPage.clickOnMenuButton();
@@ -66,16 +58,16 @@ public class IMDBTest {
         final Movie randomMovie = topMoviesPage.getMoviesFromList()
                 .get(new Random().nextInt(250));
         final MoviePage moviePage = topMoviesPage.clickOnMovieByPosition(randomMovie.getPosition());
-        assertAll("Check that random movie contains correct data",
-                () -> assertTrue(moviePage.isLoaded(), "Name is not loaded"),
-                () -> assertEquals(randomMovie.getTitle(), moviePage.getName(), "Wrong Title"),
-                () -> assertTrue(moviePage.getYear(randomMovie.getYear()), "Wrong Year"),
-                () -> assertEquals(randomMovie.getPosition(), moviePage.getPosition(), "Wrong Position"),
-                () -> assertEquals(randomMovie.getRating(), moviePage.getRating(), "Wrong Rating"));
+        softAssert.assertTrue(moviePage.isLoaded(), "Name is not loaded");
+        softAssert.assertEquals(randomMovie.getTitle(), moviePage.getName(), "Wrong Title");
+        softAssert.assertTrue(moviePage.getYear(randomMovie.getYear()), "Wrong Year");
+        softAssert.assertEquals(randomMovie.getPosition(), moviePage.getPosition(), "Wrong Position");
+        softAssert.assertEquals(randomMovie.getRating(), moviePage.getRating(), "Wrong Rating");
+        softAssert.assertAll();
     }
 
-    @AfterEach
+    @AfterMethod
     void postCondition() {
-        driver.quit();
+        browser.getDriver().quit();
     }
 }

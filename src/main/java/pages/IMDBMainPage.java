@@ -1,6 +1,6 @@
 package pages;
 
-import org.openqa.selenium.WebDriver;
+import driver.Browser;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
@@ -12,8 +12,8 @@ public final class IMDBMainPage extends BasePage {
     @FindBy(id = "imdbHeader-navDrawerOpen")
     private WebElement menuButton;
 
-    public IMDBMainPage(final WebDriver driver) {
-        super(driver);
+    public IMDBMainPage(final Browser browser) {
+        super(browser);
     }
 
     @Override
@@ -23,6 +23,6 @@ public final class IMDBMainPage extends BasePage {
 
     public MenuPage clickOnMenuButton() {
         waitUtil.waitUntilElementIsClickable(menuButton).click();
-        return new MenuPage(driver);
+        return new MenuPage(browser);
     }
 }
